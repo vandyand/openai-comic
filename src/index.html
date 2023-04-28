@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comic Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-white antialiased">
+  <div class="container mx-auto px-4 py-5 w-full sm:w-8/9 md:w-7/8 lg:w-5/6 xl:w-4/5 2xl:max-w-7xl">
+    <h1 class="text-4xl font-bold mb-4 text-center">Comic Generator</h1>
+    <form id="comic-form" class="flex flex-wrap justify-center gap-2 mb-5">
+      <label for="prompt" class="sr-only">Enter a prompt for your comic:</label>
+      <input type="text" id="prompt" name="prompt"
+        class="w-full sm:w-auto flex-grow border border-gray-300 p-2 rounded-md"
+        placeholder="Enter a prompt for your comic" required>
+      <button type="submit" id="generate-comic-btn" class="bg-blue-500 text-white px-4 py-2 rounded-md">Generate Comic</button>
+    </form>
+    <div class="example-prompt cursor-pointer mb-5 p-4 rounded border-2 border-gray-300 text-center"
+      id="example-prompt"></div>
+    <div id="loading-indicator" style="display: none;"
+      class="w-8 h-8 border-t-2 border-blue-500 rounded-full animate-spin mx-auto"></div>
+    <div id="comic-container"></div>
+  </div>
+  <script>
+    const examplePrompt = "When the bus was late to pick them up one morning, Timmy and Tommy decided to take matters into their own hands...";
+    document.getElementById('example-prompt').textContent = `Click here for an example prompt: "${examplePrompt}"`;
+
+    document.getElementById('comic-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const prompt = document.getElementById('prompt').value;
+      const loadingIndicator = document.getElementById('loading-indicator');
+      const generateComicBtn = document.getElementById('generate-comic-btn');
+
+      loadingIndicator.style.display = 'block';
+      generateComicBtn.classList.add('cursor-not-allowed', 'opacity-50');
+      generateComicBtn.disabled = true;
+
+      const response = await fetch('http://localhost:3334/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt })
+      });
+
+      loadingIndicator.style.display = 'none';
+      generateComicBtn.classList.remove('cursor-not-allowed', 'opacity-50');
+      generateComicBtn.disabled = false;
+
+      if (response.ok) {
+        const comicHTML = await response.text();
+        document.getElementById('comic-container').innerHTML = comicHTML;
+      } else {
+        alert('Error generating comic');
+      }
+    });
+
+    document.getElementById('example-prompt').addEventListener('click', () => {
+      document.getElementById('prompt').value = examplePrompt;
+      document.getElementById('comic-form').dispatchEvent(new Event('submit'));
+    });
+  </script>
+</body>
+</html>

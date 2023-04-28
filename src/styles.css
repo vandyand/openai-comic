@@ -1,0 +1,68 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#loading-indicator {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #000;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  animation: spin 1s linear infinite;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+form {
+  width: 100%;
+  text-align: center;
+}
+
+.panels-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.panel img {
+  width: 200px;
+  height: auto;
+  display: inline-block;
+}
+
+.panel {
+  text-align: center;
+  margin-bottom: 20px;
+  max-width: 200px;
+}
+
+.example-prompt {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  text-align: center;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #f8f8f8;
+}
+
+.example-prompt:hover {
+  background-color: #e0e0e0;
+}
